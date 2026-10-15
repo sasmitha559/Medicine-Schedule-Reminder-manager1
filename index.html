@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medicine Schedule and Reminder Manager</title>
+  <meta name="description" content="A modern, offline-first medicine schedule and reminder manager web application.">
+  <meta name="theme-color" content="#1d68f2">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+
+    <!-- ========================================== -->
+    <!-- LEFT SIDEBAR                               -->
+    <!-- ========================================== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+            <path d="M3.22 12H9.5l1.5-3 2 6 1.5-3h6.28"/>
+          </svg>
+        </div>
+        <div class="brand-text-block">
+          <span class="brand-title">Medicine Schedule</span>
+          <span class="brand-sub">and Reminder Manager</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu" aria-label="Main Menu">
+        <button type="button" class="sidebar-item active" data-section="dashboard" id="nav-dashboard">
+          <svg class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>Dashboard</span>
+        </button>
+
+        <button type="button" class="sidebar-item" data-section="medicines" id="nav-medicines">
+          <svg class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
+            <path d="m8.5 8.5 7 7"/>
+          </svg>
+          <span>Medicines</span>
+        </button>
+
+        <button type="button" class="sidebar-item" data-section="history" id="nav-history">
+          <svg class="menu-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+            <path d="M12 7v5l4 2"/>
+          </svg>
+          <span>History</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-content">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+          </svg>
+          <div class="footer-text">
+            <span>Stay Healthy</span>
+            <span>Stay Happy</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ========================================== -->
+    <!-- MAIN CONTENT AREA                          -->
+    <!-- ========================================== -->
+    <div class="main-wrapper">
+
+      <!-- Top Header Bar -->
+      <header class="top-navbar">
+        <button type="button" class="btn-hamburger" id="btn-toggle-sidebar" aria-label="Toggle Sidebar">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" x2="20" y1="12" y2="12"/>
+            <line x1="4" x2="20" y1="6" y2="6"/>
+            <line x1="4" x2="20" y1="18" y2="18"/>
+          </svg>
+        </button>
+
+        <div class="top-nav-right">
+          <!-- Notification Bell -->
+          <button type="button" class="btn-icon-bell" id="btn-toggle-notification" title="Browser Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+              <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+            </svg>
+            <span class="bell-dot"></span>
+          </button>
+
+          <!-- User Profile -->
+          <div class="user-profile-badge">
+            <div class="user-avatar">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M20 21a8 8 0 0 0-16 0"/>
+              </svg>
+            </div>
+            <span class="user-name">Sasmitha K.M</span>
+            <svg class="chevron-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Views -->
+      <main class="page-content">
+
+        <!-- ========================================== -->
+        <!-- VIEW 1: DASHBOARD                          -->
+        <!-- ========================================== -->
+        <section id="section-dashboard" class="content-section active">
+          <!-- Greeting Header -->
+          <div class="greeting-row">
+            <div>
+              <h1 class="greeting-title" id="greeting-text">Good Morning, Sasmitha! ☀️</h1>
+              <p class="greeting-sub">Here's your medicine schedule for today. Take care!</p>
+            </div>
+            <div class="date-badge-pill">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d68f2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                <line x1="16" x2="16" y1="2" y2="6"/>
+                <line x1="8" x2="8" y1="2" y2="6"/>
+                <line x1="3" x2="21" y1="10" y2="10"/>
+              </svg>
+              <span id="header-today-date">Saturday, 26 April 2025</span>
+            </div>
+          </div>
+
+          <!-- 4 Stat Cards Row -->
+          <div class="kpi-grid">
+            <!-- Card 1: Total Medicines -->
+            <div class="kpi-card card-blue" id="kpi-card-total">
+              <div class="kpi-icon-circle bg-blue-tint">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1d68f2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
+                  <path d="m8.5 8.5 7 7"/>
+                </svg>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Total Medicines</span>
+                <span class="kpi-number" id="stat-total-medicines">5</span>
+                <button type="button" class="kpi-link" id="link-view-all-meds">View all &rarr;</button>
+              </div>
+            </div>
+
+            <!-- Card 2: Today's Medicines -->
+            <div class="kpi-card card-green" id="kpi-card-today">
+              <div class="kpi-icon-circle bg-green-tint">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                  <line x1="16" x2="16" y1="2" y2="6"/>
+                  <line x1="8" x2="8" y1="2" y2="6"/>
+                  <line x1="3" x2="21" y1="10" y2="10"/>
+                  <path d="m9 16 2 2 4-4"/>
+                </svg>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Today's Medicines</span>
+                <span class="kpi-number" id="stat-today-medicines">2</span>
+                <button type="button" class="kpi-link text-green" id="link-view-today">View today &rarr;</button>
+              </div>
+            </div>
+
+            <!-- Card 3: Taken Today -->
+            <div class="kpi-card card-purple" id="kpi-card-taken">
+              <div class="kpi-icon-circle bg-purple-tint">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Taken Today</span>
+                <span class="kpi-number" id="stat-taken-count">1</span>
+                <button type="button" class="kpi-link text-purple" id="link-view-taken-history">View history &rarr;</button>
+              </div>
+            </div>
+
+            <!-- Card 4: Missed Today -->
+            <div class="kpi-card card-red" id="kpi-card-missed">
+              <div class="kpi-icon-circle bg-red-tint">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="15" y1="9" x2="9" y2="15"/>
+                  <line x1="9" y1="9" x2="15" y2="15"/>
+                </svg>
+              </div>
+              <div class="kpi-info">
+                <span class="kpi-label">Missed Today</span>
+                <span class="kpi-number" id="stat-missed-count">0</span>
+                <button type="button" class="kpi-link text-red" id="link-view-missed-history">View history &rarr;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Dashboard Split Grid -->
+          <div class="dashboard-main-grid">
+
+            <!-- LEFT COLUMN -->
+            <div class="dashboard-col-left">
+
+              <!-- Today's Medicines Card -->
+              <div class="panel-card">
+                <div class="panel-header">
+                  <div class="panel-title-wrap">
+                    <div class="icon-circle-sm bg-blue-tint">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d68f2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
+                      </svg>
+                    </div>
+                    <h2>Today's Medicines</h2>
+                  </div>
+                  <div class="panel-date-sub" id="sub-today-date">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect width="18" height="18" x="3" y="4" rx="2"/>
+                      <line x1="16" x2="16" y1="2" y2="6"/>
+                      <line x1="8" x2="8" y1="2" y2="6"/>
+                      <line x1="3" x2="21" y1="10" y2="10"/>
+                    </svg>
+                    <span id="label-today-schedule-date">Saturday, 26 April 2025</span>
+                  </div>
+                </div>
+
+                <div class="panel-body">
+                  <div class="today-meds-list" id="dashboard-today-list">
+                    <!-- Populated dynamically via JS -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Recent History Card -->
+              <div class="panel-card mt-4">
+                <div class="panel-header">
+                  <div class="panel-title-wrap">
+                    <div class="icon-circle-sm bg-blue-tint">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d68f2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                      </svg>
+                    </div>
+                    <h2>Recent History</h2>
+                  </div>
+
+                  <div class="filter-pill-group">
+                    <button type="button" class="dash-filter-btn active" data-filter="ALL" id="dash-filter-all">All</button>
+                    <button type="button" class="dash-filter-btn" data-filter="TAKEN" id="dash-filter-taken">Taken</button>
+                    <button type="button" class="dash-filter-btn" data-filter="MISSED" id="dash-filter-missed">Missed</button>
+                  </div>
+                </div>
+
+                <div class="panel-body no-pad">
+                  <div class="table-wrap">
+                    <table class="modern-table">
+                      <thead>
+                        <tr>
+                          <th>Medicine</th>
+                          <th>Date</th>
+                          <th>Scheduled Time</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody id="dash-history-tbody">
+                        <!-- Populated dynamically -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="dashboard-col-right">
+
+              <!-- Upcoming Reminders Card -->
+              <div class="panel-card">
+                <div class="panel-header">
+                  <div class="panel-title-wrap">
+                    <div class="icon-circle-sm bg-blue-tint">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1d68f2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                        <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                      </svg>
+                    </div>
+                    <h2>Upcoming Reminders</h2>
+                  </div>
+                  <button type="button" class="panel-header-link" id="btn-view-all-reminders">View all &rarr;</button>
+                </div>
+
+                <div class="panel-body">
+                  <div class="upcoming-reminder-list" id="dashboard-upcoming-list">
+                    <!-- Populated dynamically -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Motivational Graphic Card -->
+              <div class="panel-card promo-card mt-4">
+                <div class="promo-illustration">
+                  <div class="calendar-illus-box">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1d68f2" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <rect width="18" height="18" x="3" y="4" rx="3"/>
+                      <line x1="16" x2="16" y1="2" y2="6"/>
+                      <line x1="8" x2="8" y1="2" y2="6"/>
+                      <line x1="3" x2="21" y1="10" y2="10"/>
+                      <path d="m9 16 2 2 4-4"/>
+                    </svg>
+                    <span class="sparkle sp-1">&#10022;</span>
+                    <span class="sparkle sp-2">&#10022;</span>
+                  </div>
+                </div>
+                <h3 class="promo-title">Stay on track with your medicines!</h3>
+                <p class="promo-sub">A healthy you is a happy you.</p>
+                <button type="button" class="btn-test-alert" id="btn-test-modal-trigger">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+                    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+                  </svg>
+                  Test Reminder Alert
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 2: MEDICINES LIST                     -->
+        <!-- ========================================== -->
+        <section id="section-medicines" class="content-section">
+          <!-- Medicines Page Header -->
+          <div class="view-header-bar">
+            <div class="view-title-left">
+              <div class="view-title-icon-circle">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+              </div>
+              <div>
+                <h1 class="view-title">Medicines</h1>
+                <p class="view-subtitle">Manage your medicine list</p>
+              </div>
+            </div>
+
+            <!-- Search & Filter Controls -->
+            <div class="search-filter-controls">
+              <div class="search-input-pill">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" id="search-input" placeholder="Search by name, dosage or type..." autocomplete="off">
+                <button type="button" class="btn-clear-search" id="btn-clear-search" style="display: none;">&times;</button>
+              </div>
+
+              <select class="type-dropdown-pill" id="filter-type-select">
+                <option value="ALL">All Types</option>
+                <option value="Tablet">Tablet</option>
+                <option value="Capsule">Capsule</option>
+                <option value="Syrup">Syrup</option>
+                <option value="Injection">Injection</option>
+                <option value="Drops">Drops</option>
+                <option value="Inhaler">Inhaler</option>
+                <option value="Ointment">Ointment</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Medicines Table Panel -->
+          <div class="panel-card mt-3">
+            <div class="panel-body no-pad">
+              <div class="table-wrap">
+                <table class="modern-table" id="medicines-full-table">
+                  <thead>
+                    <tr>
+                      <th>Medicine</th>
+                      <th>Dosage</th>
+                      <th>Type</th>
+                      <th>Start Date</th>
+                      <th>End Date</th>
+                      <th>Reminder</th>
+                      <th>Status</th>
+                      <th class="text-center">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="medicines-table-body">
+                    <!-- Populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Empty State -->
+              <div id="medicines-empty-state" class="empty-placeholder" style="display: none;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="12" y1="8" x2="12" y2="12"/>
+                  <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <h3>No Medicines Found</h3>
+                <p>No medicines match your current query. Click "+ Add Medicine" to add one.</p>
+              </div>
+
+              <!-- Table Footer & Pagination -->
+              <div class="table-footer-bar">
+                <span class="showing-count" id="showing-medicines-count">Showing 0 medicines</span>
+                <div class="pagination-pills">
+                  <button type="button" class="page-arrow" disabled>&lsaquo;</button>
+                  <span class="page-num active">1</span>
+                  <button type="button" class="page-arrow" disabled>&rsaquo;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Floating/Bottom + Add Medicine Action -->
+          <div class="bottom-action-row">
+            <button type="button" class="btn-primary-add" id="btn-open-add-form">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span>Add Medicine</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 3: ADD / EDIT MEDICINE FORM           -->
+        <!-- ========================================== -->
+        <section id="section-add-medicine" class="content-section">
+          <div class="panel-card form-box-card">
+            <div class="form-header-bar">
+              <div class="view-title-icon-circle bg-blue">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
+                  <path d="m8.5 8.5 7 7"/>
+                </svg>
+              </div>
+              <div>
+                <h2 id="form-heading-text">Add New Medicine</h2>
+                <p class="form-subtext">Fill in the details below to add a new medicine to your schedule.</p>
+              </div>
+            </div>
+
+            <!-- Feedback Alert -->
+            <div id="form-alert-box" class="form-alert" style="display: none;"></div>
+
+            <form id="medicine-form" novalidate>
+              <input type="hidden" id="edit-medicine-id" value="">
+
+              <div class="form-two-col-grid">
+                <!-- Col 1, Row 1: Name -->
+                <div class="form-field">
+                  <label for="med-name">Medicine Name <span class="req-star">*</span></label>
+                  <input type="text" id="med-name" placeholder="e.g. Paracetamol" required autocomplete="off">
+                </div>
+
+                <!-- Col 2, Row 1: Dosage -->
+                <div class="form-field">
+                  <label for="med-dosage">Dosage <span class="req-star">*</span></label>
+                  <input type="text" id="med-dosage" placeholder="e.g. 500 mg" required autocomplete="off">
+                </div>
+
+                <!-- Col 1, Row 2: Type -->
+                <div class="form-field">
+                  <label for="med-type">Medicine Type <span class="req-star">*</span></label>
+                  <select id="med-type" required>
+                    <option value="" disabled selected>Select type</option>
+                    <option value="Tablet">Tablet</option>
+                    <option value="Capsule">Capsule</option>
+                    <option value="Syrup">Syrup</option>
+                    <option value="Injection">Injection</option>
+                    <option value="Drops">Drops</option>
+                    <option value="Inhaler">Inhaler</option>
+                    <option value="Ointment">Topical / Ointment</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <!-- Col 2, Row 2: End Date -->
+                <div class="form-field">
+                  <label for="med-end-date">End Date <span class="req-star">*</span></label>
+                  <div class="input-with-icon">
+                    <input type="date" id="med-end-date" required>
+                  </div>
+                </div>
+
+                <!-- Col 1, Row 3: Start Date -->
+                <div class="form-field">
+                  <label for="med-start-date">Start Date <span class="req-star">*</span></label>
+                  <div class="input-with-icon">
+                    <input type="date" id="med-start-date" required>
+                  </div>
+                </div>
+
+                <!-- Col 2, Row 3: Notes -->
+                <div class="form-field">
+                  <label for="med-notes">Notes</label>
+                  <textarea id="med-notes" rows="2" placeholder="e.g. Take after food"></textarea>
+                </div>
+
+                <!-- Col 1, Row 4: Reminder Time -->
+                <div class="form-field">
+                  <label for="med-reminder-time">Reminder Time <span class="req-star">*</span></label>
+                  <div class="input-with-icon">
+                    <input type="time" id="med-reminder-time" required>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Form Buttons -->
+              <div class="form-btn-actions">
+                <button type="submit" class="btn-form-submit" id="btn-submit-med">Add Medicine</button>
+                <button type="button" class="btn-form-clear" id="btn-clear-form">Clear</button>
+                <button type="button" class="btn-form-cancel" id="btn-cancel-edit" style="display: none;">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 4: HISTORY                            -->
+        <!-- ========================================== -->
+        <section id="section-history" class="content-section">
+          <!-- History View Header -->
+          <div class="view-header-bar">
+            <div class="view-title-left">
+              <div class="view-title-icon-circle bg-blue">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                  <path d="M3 3v5h5"/>
+                  <path d="M12 7v5l4 2"/>
+                </svg>
+              </div>
+              <div>
+                <h1 class="view-title">History</h1>
+                <p class="view-subtitle">View your medicine history</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- History Filter Bar Card -->
+          <div class="panel-card history-filter-card mt-3">
+            <div class="history-filter-grid">
+              <div class="filter-col">
+                <label for="history-filter-date">Date Range</label>
+                <div class="date-range-pill">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                    <rect width="18" height="18" x="3" y="4" rx="2"/>
+                    <line x1="16" x2="16" y1="2" y2="6"/>
+                    <line x1="8" x2="8" y1="2" y2="6"/>
+                    <line x1="3" x2="21" y1="10" y2="10"/>
+                  </svg>
+                  <select id="history-filter-date">
+                    <option value="ALL">All Recorded Dates</option>
+                    <option value="TODAY" selected>Today Only</option>
+                    <option value="7DAYS">Last 7 Days</option>
+                    <option value="30DAYS">Last 30 Days</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="filter-col">
+                <label for="history-filter-med">Medicine</label>
+                <select class="med-select-pill" id="history-filter-med">
+                  <option value="ALL">All Medicines</option>
+                  <!-- Populated dynamically -->
+                </select>
+              </div>
+
+              <div class="filter-col-btn">
+                <button type="button" class="btn-refresh-history" id="btn-refresh-history">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                    <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/>
+                    <path d="M16 21h5v-5"/>
+                  </svg>
+                  <span>Refresh</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- History Table Panel -->
+          <div class="panel-card mt-3">
+            <div class="panel-body no-pad">
+              <div class="table-wrap">
+                <table class="modern-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Time</th>
+                      <th>Medicine</th>
+                      <th>Dosage</th>
+                      <th>Type</th>
+                      <th>Status</th>
+                      <th>Notes</th>
+                      <th class="text-center">View</th>
+                    </tr>
+                  </thead>
+                  <tbody id="history-full-table-body">
+                    <!-- Populated dynamically -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Empty state -->
+              <div id="history-empty-state" class="empty-placeholder" style="display: none;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="1.5">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                  <path d="M3 3v5h5"/>
+                </svg>
+                <h3>No History Recorded Yet</h3>
+                <p>When medication reminders trigger and you mark doses as Taken or Missed, logs appear here.</p>
+              </div>
+
+              <!-- Footer with count and pagination -->
+              <div class="table-footer-bar">
+                <span class="showing-count" id="showing-history-count">Showing 0 records</span>
+                <div class="pagination-pills">
+                  <button type="button" class="page-arrow" disabled>&lsaquo;</button>
+                  <span class="page-num active">1</span>
+                  <button type="button" class="page-arrow" disabled>&rsaquo;</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL: TIME TO TAKE MEDICINE REMINDER      -->
+  <!-- ========================================== -->
+  <div id="reminder-modal" class="modal-backdrop" style="display: none;" role="dialog" aria-modal="true">
+    <div class="reminder-card-modal">
+      <!-- Close button -->
+      <button type="button" class="modal-close-x" id="btn-close-modal" aria-label="Close modal">&times;</button>
+
+      <!-- Bell Icon -->
+      <div class="modal-bell-badge">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#1d68f2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/>
+          <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>
+        </svg>
+      </div>
+
+      <h3 class="modal-headline">Time to take your medicine!</h3>
+
+      <!-- Medicine Pill Highlight Box -->
+      <div class="modal-med-highlight">
+        <div class="modal-capsule-badge">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1d68f2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/>
+            <path d="m8.5 8.5 7 7"/>
+          </svg>
+        </div>
+        <div class="modal-med-text">
+          <h4 id="reminder-med-name">Paracetamol</h4>
+          <span id="reminder-med-meta">500 mg &bull; Tablet</span>
+        </div>
+      </div>
+
+      <!-- Time Display -->
+      <div class="modal-time-display" id="reminder-med-time">09:00 AM</div>
+
+      <!-- Taken / Missed Buttons -->
+      <div class="modal-btn-row">
+        <button type="button" class="btn-modal-taken" id="btn-reminder-taken">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <span>Taken</span>
+        </button>
+        <button type="button" class="btn-modal-missed" id="btn-reminder-missed">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+          <span>Missed</span>
+        </button>
+      </div>
+
+      <!-- Snooze / Don't show option -->
+      <div class="modal-checkbox-row">
+        <label>
+          <input type="checkbox" id="chk-snooze">
+          <span>Don't show again for 1 hour</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
